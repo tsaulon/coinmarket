@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="author" content="Tyrone Saulon" />
+        <meta name="description" content="Portfolio website to demonstrate skills." />
+        <meta name="keywords" content="tyrone, saulon, software, developer, portfolio, website" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+        <!-- Google reCAPTCHA -->
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    </head>
+    <body>
+        <section class="hero is-fullheight is-light is-bold">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <div class="container">
+                        <div class="level">
+                            <div class="container">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <h1 class="subtitle">Coin Watcher</h1>
+                                    </div>
+                                    <div class="level-item">
+                                        <!--get coin information -->
+                                        <form action="/getCoin" method="POST">
+                                            <div class="field has-addons">
+                                                <p class="control">
+                                                    <input name="formSymbol" class="input" type="text" placeholder="Enter symbol (e.g. BTC, ETH, XRP)">
+                                                </p>
+                                                <p class="control">
+                                                    <button class="button is-dark">
+                                                        <span class="icon is-pulled-left"><i class="fas fa-eye"></i></span><span class="is-pulled-right">Watch</span>
+                                                    </button>
+                                                </p>
+                                            </div>
+                                        </form>                                            
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>         
+                    </div>                        
+                </nav>                    
+            </div>
+
+            <div class="hero-body">
+                <div id="collection" class="container has-text-centered">
+                <!--
+                    <% for(var i = 0; i < coins.length; i++){ %>
+                    <div class="columns is-5 is-vcentered">                     
+                        <div class="column is-one-fifth">
+                            <div class="card">
+                               <header class="card-header">
+                                   <p class="card-header-title"><%= coins[i].name %></p>
+                               </header>
+                               <div class="card-content">
+                                    <div class="content is-size-4">
+                                        <p><span class="icon is-pulled-left"><i class="fas fa-dollar-sign"></i></span><span><%= coins[i].usd %></span></p>
+                                        <p><span class="icon is-pulled-left"><i class="fab fa-btc"></i></span><span><%= coins[i].btc %></span></p>
+                                    </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <% } %>
+                    -->
+                </div>
+            </div>
+            <script>
+                //holds coins passed from server side
+                var x = <%- JSON.stringify(coins) %>;
+                
+                //select containers
+                var collection = document.querySelector("#collection");
+                var columns = document.createElement("div");
+                    
+                for(var i = 0; i < x.length; i++)
+                {
+                    if(i % 5 == 0)
+                    {
+                        columns.innerHTML = "";
+                        columns = document.createElement("div");
+                        columns.classList.add("columns", "is-5", "is-vcentered");
+                    }
+
+                    var column = document.createElement("div");
+                    column.classList.add("column", "is-one-fifth");
+                    var card = document.createElement("div");
+                    card.classList.add("card");
+
+                    //create card header
+                    var header = document.createElement("header");
+                    header.classList.add("card-header");
+                    var p = document.createElement("p");
+                    p.classList.add("card-header-title");
+                    p.textContent = x[i].name;
+
+                    header.appendChild(p);
+
+                    //create usd details
+                    var usd = document.createElement("p");
+                    var usdSpan = document.createElement("span");
+                    usdSpan.classList.add("icon", "is-pulled-left");
+                    var usdSpanIcon = document.createElement("i");
+                    usdSpanIcon.classList.add("fas", "fa-dollar-sign");
+                    var usdPrice = document.createElement("span");
+                    usdPrice.textContent = x[i].usd;
+
+                    usdSpan.appendChild(usdSpanIcon);
+                    usd.appendChild(usdSpan);
+                    usd.appendChild(usdPrice);
+
+                    //create btc details
+                    var btc = document.createElement("p");
+                    var btcSpan = document.createElement("span");
+                    btcSpan.classList.add("icon", "is-pulled-left");
+                    var btcSpanIcon = document.createElement("i");
+                    btcSpanIcon.classList.add("fab", "fa-btc");
+                    var btcPrice = document.createElement("span");
+                    btcPrice.textContent = x[i].btc;
+
+                    btcSpan.appendChild(btcSpanIcon);
+                    btc.appendChild(btcSpan);
+                    btc.appendChild(btcPrice);
+                    
+                    //create holder for details
+                    var cardContent = document.createElement("div");
+                    cardContent.classList.add("card-content");
+                    var content = document.createElement("div");
+                    content.classList.add("content", "is-size-4");
+
+                    content.appendChild(usd);
+                    content.appendChild(btc);
+                    cardContent.appendChild(content);
+
+                    card.appendChild(header);
+                    card.appendChild(cardContent);
+                    column.appendChild(card);
+
+                    columns.appendChild(column);
+                }
+                
+                //append all cards to page
+                collection.appendChild(columns);
+
+                //TODO: Format Cards
+                //      Every five cards new column must be created to divide cards.
+                //      Maximum capacity is 15 cards on page.
+
+                console.log(x);
+            </script>
+            <div class="hero-foot">
+                <div class="container">
+                    <!--TODO: Add Footer Content -->
+                    <p class="has-text-centered">
+                            <div class="breadcrumb is-centered" aria-label="breadcrumbs">
+                                    <ul>
+                                        <li><a href="https://github.com/tsaulon" target="_blank"><span class="icon"><i class="fab fa-github"></i></span>Github</a></li>
+                                        <li><a href="https://www.instagram.com/tyronesaulon/" target="_blank"><span class="icon"><i class="fab fa-instagram"></i></span>Instagram</a></li>
+                                        <li><a href="https://twitter.com/TSaulon" target="_blank"><span class="icon"><i class="fab fa-twitter"></i></span>Twitter</a></li>
+                                        <li><a href="https://www.facebook.com/tyrone.saulon" target="_blank"><span class="icon"><i class="fab fa-facebook"></i></span>Facebook</a></li>
+                                    </ul>
+                            </div>
+                        </p>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
