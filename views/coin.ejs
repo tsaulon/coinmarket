@@ -71,17 +71,26 @@
                 //holds coins passed from server side
                 var x = <%- JSON.stringify(coins) %>;
                 
-                //select containers
+                //select container
                 var collection = document.querySelector("#collection");
-                var columns = document.createElement("div");
-                    
+                
+                var cols = []; //columns array (max 3 col)
+                var colCount = 0;
+
+                //populate cols with empty div elements of columns class
+                for(var i = 0; i < 3; i++)
+                {
+                    cols.push(document.createElement("div"));
+                    cols[i].classList.add("columns", "is-5", "is-vcentered");
+                }
+                
+                //build cards
                 for(var i = 0; i < x.length; i++)
                 {
-                    if(i % 5 == 0)
+                    //track cards for every fifth iteration
+                    if(i % 5 == 0 && i > 0)
                     {
-                        columns.innerHTML = "";
-                        columns = document.createElement("div");
-                        columns.classList.add("columns", "is-5", "is-vcentered");
+                       colCount++;
                     }
 
                     var column = document.createElement("div");
@@ -138,15 +147,16 @@
                     card.appendChild(cardContent);
                     column.appendChild(card);
 
-                    columns.appendChild(column);
+                    //columns.appendChild(column);
+                    cols[colCount].appendChild(column);
                 }
                 
                 //append all cards to page
-                collection.appendChild(columns);
+                cols.forEach(function(x){
+                    return collection.appendChild(x);
+                });
 
-                //TODO: Format Cards
-                //      Every five cards new column must be created to divide cards.
-                //      Maximum capacity is 15 cards on page.
+                //TODO: Create error alerts for users when adding coins over 20 (May be something handled server side.)
 
                 console.log(x);
             </script>
